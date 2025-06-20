@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, ValidationError#EqualTo Verifica se uma senha está igual a outra
 from estudo import db, bcrypt
-from estudo.models import Lista, User
+from estudo.models import Lista, User 
 
 
 class UserForm(FlaskForm):

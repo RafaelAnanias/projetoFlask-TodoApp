@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, current_user
 from estudo.models import Lista
 from estudo.forms import ListaForm, UserForm, LoginForm
 
-@app.route('/', methods = ['GET','POST' ])
+@app.route('/', methods = ['GET','POST' ]) 
 def homepage():
     usuario = 'Rafael'
     

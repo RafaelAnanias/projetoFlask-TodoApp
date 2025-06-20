@@ -4,12 +4,10 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-
-
+ 
 import os
 
 load_dotenv('.env')
-
 
 app = Flask(__name__)
 
