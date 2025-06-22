@@ -1,9 +1,12 @@
-from flask import Flask
+from flask import Flask, Response, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+import mysql.connector
+import json
+
  
 import os
 
@@ -23,7 +26,7 @@ migrate = Migrate(app, db)
 
 login_manager = LoginManager (app)
 
-login_manager.login_view = 'login'
+login_manager.login_view = 'homepage'
 
 bcrypt = Bcrypt(app)
 
