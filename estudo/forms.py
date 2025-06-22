@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 from flask_login import current_user
 from estudo import db, bcrypt
-from estudo.models import Lista, User 
+from estudo.models import Lista, User
 
 
 class UserForm(FlaskForm):
@@ -11,15 +11,20 @@ class UserForm(FlaskForm):
     sobrenome = StringField('Sobrenome', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired()])
     senha = PasswordField('Senha', validators=[DataRequired()])
-    confirmacao_senha = PasswordField('Confirmar senha', validators=[DataRequired(), EqualTo('senha')])
+    confirmacao_senha = PasswordField(
+        'Confirmar senha',
+        validators=[DataRequired(), EqualTo('senha')]
+    )
     btnSubmit = SubmitField('Cadastrar')
 
-    def validate_email(self, email):  # Corrigido aqui
+    def validate_email(self, email):
+        """Valida se já existe um usuário com o e-mail fornecido"""
         if User.query.filter_by(email=email.data).first():
             raise ValidationError('Usuário já cadastrado com esse email!')
 
     def save(self):
-        senha_hash = bcrypt.generate_password_hash(self.senha.data).decode('utf-8')  # Ajustado aqui
+        """Salva o novo usuário com senha criptografada"""
+        senha_hash = bcrypt.generate_password_hash(self.senha.data).decode('utf-8')
         user = User(
             nome=self.nome.data,
             sobrenome=self.sobrenome.data,
@@ -37,10 +42,11 @@ class LoginForm(FlaskForm):
     btnSubmit = SubmitField('Login')
 
     def login(self):
+        """Verifica as credenciais do usuário"""
         user = User.query.filter_by(email=self.email.data).first()
         if user:
             if bcrypt.check_password_hash(user.senha, self.senha.data):
-                return user
+                return user  # Usuário autenticado com sucesso
             else:
                 raise Exception('Senha incorreta!')
         else:
@@ -52,6 +58,7 @@ class ListaForm(FlaskForm):
     btnSubmit = SubmitField('Enviar')
 
     def save(self):
+        """Salva a tarefa vinculada ao usuário autenticado"""
         if not current_user.is_authenticated:
             raise Exception("Usuário não autenticado!")
 
@@ -62,3 +69,5 @@ class ListaForm(FlaskForm):
         db.session.add(lista)
         db.session.commit()
         return lista
+
+
